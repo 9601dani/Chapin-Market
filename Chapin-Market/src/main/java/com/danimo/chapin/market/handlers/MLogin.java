@@ -1,6 +1,6 @@
 package com.danimo.chapin.market.handlers;
 
-import com.danimo.chapin.market.clases.Empleado;
+import com.danimo.chapin.market.model.Empleado;
 import com.danimo.chapin.market.conexion.Conexion;
 import com.danimo.chapin.market.enums.Rol;
 import com.danimo.chapin.market.enums.Sucursal;

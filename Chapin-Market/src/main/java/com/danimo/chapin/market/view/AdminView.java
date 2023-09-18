@@ -4,21 +4,72 @@
  */
 package com.danimo.chapin.market.view;
 
+import com.danimo.chapin.market.daoImpl.EmpleadoDaoImpl;
+import com.danimo.chapin.market.model.Empleado;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
 
 /**
  *
  * @author danimo
  */
 public class AdminView extends javax.swing.JInternalFrame {
+    private Empleado empleado;
+    private int id_empleado;
 
     /**
      * Creates new form AdminView
      */
-    public AdminView() throws PropertyVetoException {
+    public AdminView(int id) throws PropertyVetoException {
         initComponents();
         this.setMaximum(true);
         this.setResizable(true);
+        this.id_empleado= id;
+        empleado= new EmpleadoDaoImpl().obtenerPorId(this.id_empleado);
+        this.name_admin_txt.setText(empleado.getNombre()+" "+ empleado.getApellido());
+        this.mostrarEmpleados();
+
+    }
+
+    public void mostrarEmpleados(){
+        ArrayList<Empleado> list_empleados= new ArrayList();
+        list_empleados= new EmpleadoDaoImpl().obtenerTodos();
+        //Creare una tabla para mostrar los datos, y mostrarlos en mi JFrame de AdminView
+        DefaultTableModel modelo= new DefaultTableModel();
+        modelo.addColumn("Codigo");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Apellido");
+        modelo.addColumn("No. Caja");
+        modelo.addColumn("Sucursal");
+        modelo.addColumn("Rol");
+        if(list_empleados.size()>0){
+            for (Empleado empleado: list_empleados){
+                if(empleado.getNo_caja()==0){
+                    modelo.addRow(new Object[]{
+                            empleado.getId(),
+                            empleado.getNombre(),
+                            empleado.getApellido(),
+                            " ",
+                            empleado.getSucursal_id(),
+                            empleado.getRol_id()
+                    });
+                }else{
+                    modelo.addRow(new Object[]{
+                            empleado.getId(),
+                            empleado.getNombre(),
+                            empleado.getApellido(),
+                            empleado.getNo_caja(),
+                            empleado.getSucursal_id(),
+                            empleado.getRol_id()
+                    });
+                }
+            }
+        }
+        this.jTable1.setModel(modelo);
+
     }
 
     /**
@@ -32,11 +83,63 @@ public class AdminView extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         name_admin_txt = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabel1.setText("Bienvenido: ");
 
         name_admin_txt.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jLabel2.setText("LISTA DE EMPLEADOS:");
+
+        jButton1.setText("Actualizar Usuarios");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jMenu1.setText("Registro");
+
+        jMenuItem1.setText("Añadir Empleado");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Reportes");
+
+        jMenuItem2.setText("Reporte top 10 Ventas");
+        jMenu2.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -44,27 +147,72 @@ public class AdminView extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(44, 44, 44)
-                .addComponent(jLabel1)
-                .addGap(77, 77, 77)
-                .addComponent(name_admin_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(893, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 960, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(64, 64, 64)
+                        .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(77, 77, 77)
+                        .addComponent(name_admin_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(478, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(name_admin_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(name_admin_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(582, Short.MAX_VALUE))
+                    .addComponent(jLabel2)
+                    .addComponent(jButton1))
+                .addGap(22, 22, 22)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO aqui va el codigo para abrir el formulario de registro de empleados
+        try {
+            System.out.println("Voy a abrir el formulario de registro de empleados");
+            Registrar_Usuario registroEmpleados= new Registrar_Usuario();
+            Main.MainP.add(registroEmpleados);
+            System.out.println("Agregue el formulario de registro de empleados");
+            registroEmpleados.show();
+            System.out.println("Mostre el formulario de registro de empleados");
+            this.toBack();
+            registroEmpleados.toFront();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al abrir el formulario de registro de empleados");
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO actualizare la tabla de empelados:
+        this.mostrarEmpleados();
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     public static javax.swing.JLabel name_admin_txt;
     // End of variables declaration//GEN-END:variables
 }

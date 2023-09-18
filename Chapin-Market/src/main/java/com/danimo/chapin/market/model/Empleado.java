@@ -1,4 +1,4 @@
-package com.danimo.chapin.market.clases;
+package com.danimo.chapin.market.model;
 
 import com.danimo.chapin.market.enums.Rol;
 import com.danimo.chapin.market.enums.Sucursal;
@@ -101,5 +101,9 @@ public class Empleado {
 
     public void setRol_id(Rol rol_id) {
         this.rol_id = rol_id;
+    }
+
+    public String toString(){
+        return "Empleado: "+this.nombre+" "+this.apellido+" "+this.username+" "+this.password+" "+this.no_caja+" "+this.sucursal_id+" "+this.rol_id;
     }
 }

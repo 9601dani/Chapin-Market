@@ -20,4 +20,19 @@ public enum Rol {
                 return null;
         }
     }
+
+    public static int getIdRol(Rol rol){
+        switch (rol){
+            case CAJERO:
+                return 1;
+            case BODEGUERO:
+                return 2;
+            case INVENTARISTA:
+                return 3;
+            case ADMINISTRADOR:
+                return 4;
+            default:
+                return 0;
+        }
+    }
 }

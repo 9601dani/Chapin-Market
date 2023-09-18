@@ -18,5 +18,18 @@ public enum Sucursal {
         }
     }
 
+    public static int getIdSucursal(Sucursal sucursal){
+        switch (sucursal){
+            case CENTRAL:
+                return 1;
+            case NORTE:
+                return 2;
+            case SUR:
+                return 3;
+            default:
+                return 0;
+        }
+    }
+
 }
 

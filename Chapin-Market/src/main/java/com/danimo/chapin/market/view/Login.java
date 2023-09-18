@@ -4,12 +4,11 @@
  */
 package com.danimo.chapin.market.view;
 
-import com.danimo.chapin.market.clases.Empleado;
-import com.danimo.chapin.market.conexion.Conexion;
+import com.danimo.chapin.market.model.Empleado;
 import com.danimo.chapin.market.enums.Rol;
 import com.danimo.chapin.market.handlers.MLogin;
 import static com.danimo.chapin.market.view.AdminView.name_admin_txt;
-import java.awt.Component;
+
 import java.awt.Image;
 import java.beans.PropertyVetoException;
 import javax.swing.JOptionPane;
@@ -125,7 +124,7 @@ public class Login extends javax.swing.JInternalFrame {
                     password_txt.setText("");
                     if(emp.getRol_id().equals(Rol.ADMINISTRADOR)){
                         Main.MainP.removeAll();
-                        AdminView admin_view = new AdminView();
+                        AdminView admin_view = new AdminView(emp.getId());
                         Main.MainP.add(admin_view);
                         admin_view.show();
                         
