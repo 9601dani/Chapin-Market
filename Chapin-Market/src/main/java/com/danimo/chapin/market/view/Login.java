@@ -8,6 +8,9 @@ import com.danimo.chapin.market.model.Empleado;
 import com.danimo.chapin.market.enums.Rol;
 import com.danimo.chapin.market.handlers.MLogin;
 import static com.danimo.chapin.market.view.AdminView.name_admin_txt;
+import static com.danimo.chapin.market.view.BodegaView.name_txt_bodega;
+import static com.danimo.chapin.market.view.CajeroView.name_vendedor_txt;
+import static com.danimo.chapin.market.view.InventaristaView.name_inventarista_txt;
 
 import java.awt.Image;
 import java.beans.PropertyVetoException;
@@ -127,11 +130,27 @@ public class Login extends javax.swing.JInternalFrame {
                         AdminView admin_view = new AdminView(emp.getId());
                         Main.MainP.add(admin_view);
                         admin_view.show();
-                        
                         name_admin_txt.setText(emp.getNombre()+" "+ emp.getApellido());
+                    }else if(emp.getRol_id().equals(Rol.BODEGUERO)){
+                        Main.MainP.removeAll();
+                        BodegaView cajero_view = new BodegaView(emp.getId());
+                        Main.MainP.add(cajero_view);
+                        cajero_view.show();
+                        name_txt_bodega.setText(emp.getNombre()+" "+ emp.getApellido());
+                    }else if(emp.getRol_id().equals(Rol.INVENTARISTA)) {
+                        Main.MainP.removeAll();
+                        CajeroView cajero_view = new CajeroView(emp.getId());
+                        Main.MainP.add(cajero_view);
+                        cajero_view.show();
+                        name_vendedor_txt.setText(emp.getNombre() + " " + emp.getApellido());
+                    } else if ( emp.getRol_id().equals(Rol.CAJERO)) {
+                        Main.MainP.removeAll();
+                        InventaristaView cajero_view = new InventaristaView(emp.getId());
+                        Main.MainP.add(cajero_view);
+                        cajero_view.show();
+                        name_inventarista_txt.setText(emp.getNombre() + " " + emp.getApellido());
                     }
                 }
-                
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Error al iniciar sesion");
