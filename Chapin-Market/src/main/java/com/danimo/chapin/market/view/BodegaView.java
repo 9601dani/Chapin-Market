@@ -4,6 +4,9 @@
  */
 package com.danimo.chapin.market.view;
 
+import com.danimo.chapin.market.daoImpl.ProductoDaoImpl;
+
+import javax.swing.*;
 import java.beans.PropertyVetoException;
 
 /**
@@ -35,6 +38,7 @@ public class BodegaView extends javax.swing.JInternalFrame {
         name_txt_bodega = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -47,7 +51,16 @@ public class BodegaView extends javax.swing.JInternalFrame {
         name_txt_bodega.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         getContentPane().add(name_txt_bodega, new org.netbeans.lib.awtextra.AbsoluteConstraints(375, 26, 270, 30));
 
-        jMenu1.setText("File");
+        jMenu1.setText("Añadir");
+
+        jMenuItem2.setText("Añadir producto");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Cerrar");
@@ -85,6 +98,22 @@ public class BodegaView extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        try {
+            IngresarABodegaView registroBodega= new IngresarABodegaView();
+            Main.MainP.add(registroBodega);
+            System.out.println("Agregue el formulario de registro a bodega");
+            registroBodega.show();
+            this.toBack();
+            registroBodega.toFront();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al abrir el formulario de registro de bodega");
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -93,6 +122,7 @@ public class BodegaView extends javax.swing.JInternalFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     public static javax.swing.JLabel name_txt_bodega;
     // End of variables declaration//GEN-END:variables
 }
