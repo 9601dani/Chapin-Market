@@ -85,13 +85,15 @@ public class AdminView extends javax.swing.JInternalFrame {
         modelo.addColumn("Nombre");
         modelo.addColumn("Descripcion");
         modelo.addColumn("Precio");
+        modelo.addColumn("Marca");
         if(list_productos.size()>0){
             for (Producto producto: list_productos){
                 modelo.addRow(new Object[]{
                         producto.getCodigo_producto(),
                         producto.getNombre(),
                         producto.getDescripcion(),
-                        producto.getPrecio()
+                        producto.getPrecio(),
+                        producto.getMarca()
                 });
             }
         }
@@ -148,6 +150,7 @@ public class AdminView extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setEnabled(false);
         jScrollPane1.setViewportView(jTable1);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 144, 960, -1));
@@ -175,6 +178,7 @@ public class AdminView extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable2.setEnabled(false);
         jScrollPane2.setViewportView(jTable2);
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 660, 960, -1));
@@ -256,6 +260,7 @@ public class AdminView extends javax.swing.JInternalFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO actualizare la tabla de empelados:
         this.mostrarEmpleados();
+        JOptionPane.showMessageDialog(null, "Se actualizaron los empleados");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -293,6 +298,7 @@ public class AdminView extends javax.swing.JInternalFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         this.mostrarProductos();
+        JOptionPane.showMessageDialog(null, "Se actualizaron los productos");
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

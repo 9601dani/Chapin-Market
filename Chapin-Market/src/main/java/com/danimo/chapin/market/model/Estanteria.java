@@ -1,19 +1,19 @@
 package com.danimo.chapin.market.model;
 
-public class Bodega {
-   private int sucursal;
+public class Estanteria {
+    private int sucursal;
     private int producto;
     private int cantidad;
 
-    public Bodega(int sucursal, int producto, int cantidad) {
+    public Estanteria(int sucursal, int producto, int cantidad) {
         this.sucursal = sucursal;
         this.producto = producto;
         this.cantidad = cantidad;
     }
 
-    public Bodega(int producto, int cantidad) {
-        this.producto= producto;
-        this.cantidad = cantidad;
+    public Estanteria(int sucursal, int producto) {
+        this.sucursal = sucursal;
+        this.producto = producto;
     }
 
     public int getSucursal() {
@@ -25,7 +25,7 @@ public class Bodega {
     }
 
     public int getProducto() {
-        return this.producto;
+        return producto;
     }
 
     public void setProducto(int producto) {

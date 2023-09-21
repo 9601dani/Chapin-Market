@@ -4,10 +4,18 @@
  */
 package com.danimo.chapin.market.view;
 
+import com.danimo.chapin.market.daoImpl.BodegaDaoImpl;
+import com.danimo.chapin.market.daoImpl.EmpleadoDaoImpl;
 import com.danimo.chapin.market.daoImpl.ProductoDaoImpl;
+import com.danimo.chapin.market.model.Bodega;
+import com.danimo.chapin.market.model.Producto;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
+
+import static com.danimo.chapin.market.enums.Sucursal.getIdSucursal;
 
 /**
  *
@@ -23,6 +31,7 @@ public class BodegaView extends javax.swing.JInternalFrame {
         this.setMaximum(true);
         this.setResizable(true);
         this.id_empleado= id;
+        this.mostrarTablaProductosPorBodega();
     }
 
     /**
@@ -36,6 +45,10 @@ public class BodegaView extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         name_txt_bodega = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -50,6 +63,34 @@ public class BodegaView extends javax.swing.JInternalFrame {
 
         name_txt_bodega.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         getContentPane().add(name_txt_bodega, new org.netbeans.lib.awtextra.AbsoluteConstraints(375, 26, 270, 30));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable1.setEnabled(false);
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 950, 470));
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jLabel2.setText("Productos existentes en sucursal:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
+
+        jButton1.setText("Actualizar Productos");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, 250, 30));
 
         jMenu1.setText("Añadir");
 
@@ -101,9 +142,9 @@ public class BodegaView extends javax.swing.JInternalFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         try {
-            IngresarABodegaView registroBodega= new IngresarABodegaView();
+            IngresarABodegaView registroBodega= new IngresarABodegaView(this.id_empleado);
             Main.MainP.add(registroBodega);
-            System.out.println("Agregue el formulario de registro a bodega");
+            System.out.println("Agregue el formulario de registro a bodega "+ id_empleado);
             registroBodega.show();
             this.toBack();
             registroBodega.toFront();
@@ -113,16 +154,63 @@ public class BodegaView extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.mostrarTablaProductosPorBodega();
+        JOptionPane.showMessageDialog(null, "Se actualizaron los productos en sucursal");
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    public void mostrarTablaProductosPorBodega(){
+        //TODO mostrar los productos que hay en bodega de la sucursal del empleado
+        try{
+            ArrayList<Bodega> productos_bodega= new BodegaDaoImpl().obtenerProductosSucursal(getIdSucursal(new EmpleadoDaoImpl().obtenerPorId(this.id_empleado).getSucursal_id()));
+            //TODO mostrar los productos de la bodega en la JTable1
+            ProductoDaoImpl productoDao= new ProductoDaoImpl();
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("Codigo");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Precio");
+            modelo.addColumn("Descripcion");
+            modelo.addColumn("Cantidad");
+            modelo.addColumn("Marca");
+            for (Bodega producto: productos_bodega) {
+                Producto pro_actu= productoDao.obtenerPorId(producto.getProducto());
+                modelo.addRow(new Object[]{
+                        pro_actu.getCodigo_producto(),
+                        pro_actu.getNombre(),
+                        pro_actu.getPrecio(),
+                        pro_actu.getDescripcion(),
+                        producto.getCantidad(),
+                        pro_actu.getMarca()
+                });
+            }
+            //TODO mostrar los productos de la bodega en la JTable1
+            jTable1.setModel(modelo);
+
+
+
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al mostrar los productos de la bodega");
+            e.printStackTrace();
+        }
+
+    }
+
 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     public static javax.swing.JLabel name_txt_bodega;
     // End of variables declaration//GEN-END:variables
 }

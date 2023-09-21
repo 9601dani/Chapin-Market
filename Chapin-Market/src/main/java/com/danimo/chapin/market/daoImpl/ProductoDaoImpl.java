@@ -24,7 +24,8 @@ public class ProductoDaoImpl implements ProductoDao {
                         resultadoConsulta.getInt("codigo_producto"),
                         resultadoConsulta.getString("nombre"),
                         resultadoConsulta.getDouble("precio"),
-                        resultadoConsulta.getString("descripcion")
+                        resultadoConsulta.getString("descripcion"),
+                        resultadoConsulta.getString("marca")
                 );
                 productos.add(producto);
             }
@@ -46,7 +47,8 @@ public class ProductoDaoImpl implements ProductoDao {
                         resultadoConsulta.getInt("codigo_producto"),
                         resultadoConsulta.getString("nombre"),
                         resultadoConsulta.getDouble("precio"),
-                        resultadoConsulta.getString("descripcion")
+                        resultadoConsulta.getString("descripcion"),
+                        resultadoConsulta.getString("marca")
                 );
                 return producto;
             }
@@ -58,12 +60,13 @@ public class ProductoDaoImpl implements ProductoDao {
 
     @Override
     public void insertar(Producto producto) {
-        String consulta = "INSERT INTO rycp.producto (nombre, precio, descripcion) VALUES (?, ?,?);";
+        String consulta = "INSERT INTO rycp.producto (nombre, precio, descripcion,marca) VALUES (?, ?,?,?);";
         try{
             PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
             statement.setString(1, producto.getNombre());
             statement.setDouble(2, producto.getPrecio());
             statement.setString(3, producto.getDescripcion());
+            statement.setString(4, producto.getMarca());
             statement.executeUpdate();
             JOptionPane.showMessageDialog(null, "Producto guardado exitosamente");
         }catch (Exception e){
@@ -74,13 +77,14 @@ public class ProductoDaoImpl implements ProductoDao {
 
     @Override
     public void actualizar(Producto producto) {
-        String consulta = "UPDATE rycp.producto SET nombre = ?, precio = ?, descripcion = ? WHERE codigo_producto = ?;";
+        String consulta = "UPDATE rycp.producto SET nombre = ?, precio = ?, descripcion = ?, marca=? WHERE codigo_producto = ?;";
         try{
             PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
             statement.setString(1, producto.getNombre());
             statement.setDouble(2, producto.getPrecio());
             statement.setString(3, producto.getDescripcion());
-            statement.setInt(4, producto.getCodigo_producto());
+            statement.setString(4, producto.getMarca());
+            statement.setInt(5, producto.getCodigo_producto());
             statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();

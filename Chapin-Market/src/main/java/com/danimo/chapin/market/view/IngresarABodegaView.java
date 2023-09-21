@@ -4,10 +4,20 @@
  */
 package com.danimo.chapin.market.view;
 
+import com.danimo.chapin.market.daoImpl.BodegaDaoImpl;
+import com.danimo.chapin.market.daoImpl.EmpleadoDaoImpl;
 import com.danimo.chapin.market.daoImpl.ProductoDaoImpl;
+import com.danimo.chapin.market.model.Bodega;
+import com.danimo.chapin.market.model.Empleado;
+import com.danimo.chapin.market.model.Producto;
+import org.postgresql.gss.GSSOutputStream;
 
+import javax.swing.*;
+import java.awt.*;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
+
+import static com.danimo.chapin.market.enums.Sucursal.getIdSucursal;
 
 /**
  *
@@ -15,14 +25,16 @@ import java.util.ArrayList;
  */
 public class IngresarABodegaView extends javax.swing.JInternalFrame {
 
+    private int id_empleado;
     /**
      * Creates new form IngresarABodegaView
      */
-    public IngresarABodegaView() throws PropertyVetoException {
+    public IngresarABodegaView(int id) throws PropertyVetoException {
         initComponents();
         this.setMaximum(true);
         this.setResizable(true);
         this.obtenerNombreProductos();
+        this.id_empleado= id;
     }
 
     public void obtenerNombreProductos(){
@@ -83,7 +95,32 @@ public class IngresarABodegaView extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // TODO vere si existe el producto en bodega de sucursal para actualizarlo, y si no hago un nuevo registro en mi entidad bodega:
+        String name_product = jComboBox1.getSelectedItem().toString();
+        int cantidad = Integer.parseInt(jTextField1.getText());
+        //consulto mi empleado, para saber en que sucursal estoy
+        Empleado empleado = new EmpleadoDaoImpl().obtenerPorId(this.id_empleado);
+        BodegaDaoImpl bodegaDaoImpl = new BodegaDaoImpl();
+        Producto producto = new BodegaDaoImpl().obtenerProductoAdmin(name_product);
+        Bodega producto_in_bodega= bodegaDaoImpl.obtenerProducto( getIdSucursal(empleado.getSucursal_id()),producto.getCodigo_producto());
+        System.out.println("id_sucursal: "+getIdSucursal(empleado.getSucursal_id())+" name_product: "+name_product);
+        System.out.println("producto_in_bodega: "+producto_in_bodega);
+        if (producto_in_bodega != null){
+            //actualizo la cantidad
+            producto_in_bodega.setCantidad(producto_in_bodega.getCantidad()+cantidad);
+            bodegaDaoImpl.actualizar(producto_in_bodega);
+            JOptionPane.showMessageDialog(null,"Se actualizo la cantidad del producto en bodega");
+        }else{
+            //creo un nuevo registro, y primero voy a buscar el producto en la bd
+            System.out.println("entre aqui en el else");
+            System.out.println("producto "+ producto);
+            Bodega bodega = new Bodega(getIdSucursal(empleado.getSucursal_id()),producto.getCodigo_producto(),cantidad);
+            bodegaDaoImpl.insertar(bodega);
+            JOptionPane.showMessageDialog(null,"Se agrego el producto a bodega");
+        }
+        this.jTextField1.setText("");
+
+
         
     }//GEN-LAST:event_jButton1ActionPerformed
 

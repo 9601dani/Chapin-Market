@@ -63,6 +63,7 @@ public class EmpleadoDaoImpl implements EmpleadoDao {
             }
         }catch (Exception e){
             e.printStackTrace();
+            System.out.println("Error al obtener empleado por id");
         }
         return null;
     }

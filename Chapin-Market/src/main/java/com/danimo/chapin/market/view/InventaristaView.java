@@ -4,7 +4,20 @@
  */
 package com.danimo.chapin.market.view;
 
+import com.danimo.chapin.market.daoImpl.BodegaDaoImpl;
+import com.danimo.chapin.market.daoImpl.EmpleadoDaoImpl;
+import com.danimo.chapin.market.daoImpl.EstanteriaDaoImpl;
+import com.danimo.chapin.market.daoImpl.ProductoDaoImpl;
+import com.danimo.chapin.market.model.Bodega;
+import com.danimo.chapin.market.model.Estanteria;
+import com.danimo.chapin.market.model.Producto;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
+
+import static com.danimo.chapin.market.enums.Sucursal.getIdSucursal;
 
 /**
  *
@@ -20,6 +33,8 @@ public class InventaristaView extends javax.swing.JInternalFrame {
         this.setMaximum(true);
         this.setResizable(true);
         this.id_empleado=id;
+        this.mostrarProductosBodegaSucursal();
+        this.mostrarProductosEstanteriaSucursal();
     }
 
     /**
@@ -33,6 +48,12 @@ public class InventaristaView extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         name_inventarista_txt = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -46,6 +67,44 @@ public class InventaristaView extends javax.swing.JInternalFrame {
 
         name_inventarista_txt.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         getContentPane().add(name_inventarista_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 290, 30));
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel2.setText("Producto en Estanteria:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 100, -1, -1));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 730, 440));
+
+        jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel3.setText("Productos en bodega");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 100, -1, -1));
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 160, 760, 440));
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -83,13 +142,82 @@ public class InventaristaView extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    public void mostrarProductosBodegaSucursal(){
+        // TODO aqui se mostraran los productos en bodega de la sucursal:
+        try{
+            ArrayList<Bodega> productos_bodega= new BodegaDaoImpl().obtenerProductosSucursal(getIdSucursal(new EmpleadoDaoImpl().obtenerPorId(this.id_empleado).getSucursal_id()));
+            //TODO mostrar los productos de la bodega en la JTable1
+            ProductoDaoImpl productoDao= new ProductoDaoImpl();
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("Codigo");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Precio");
+            modelo.addColumn("Descripcion");
+            modelo.addColumn("Cantidad");
+            modelo.addColumn("Marca");
+            for (Bodega producto: productos_bodega) {
+                Producto pro_actu= productoDao.obtenerPorId(producto.getProducto());
+                modelo.addRow(new Object[]{
+                        pro_actu.getCodigo_producto(),
+                        pro_actu.getNombre(),
+                        pro_actu.getPrecio(),
+                        pro_actu.getDescripcion(),
+                        producto.getCantidad(),
+                        pro_actu.getMarca()
+                });
+            }
+            //TODO mostrar los productos de la bodega en la JTable1
+            jTable1.setModel(modelo);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al mostrar los productos de la bodega");
+            e.printStackTrace();
+        }
 
+    }
+
+    public void mostrarProductosEstanteriaSucursal(){
+        try{
+            ArrayList<Estanteria> productos_estanteria= new EstanteriaDaoImpl().obtenerProductosEstanterias(getIdSucursal(new EmpleadoDaoImpl().obtenerPorId(this.id_empleado).getSucursal_id()));
+            //TODO mostrar los productos de la bodega en la JTable1
+            ProductoDaoImpl productoDao= new ProductoDaoImpl();
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("Codigo");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Precio");
+            modelo.addColumn("Descripcion");
+            modelo.addColumn("Cantidad");
+            modelo.addColumn("Marca");
+            for (Estanteria producto: productos_estanteria) {
+                Producto pro_actu= productoDao.obtenerPorId(producto.getProducto());
+                modelo.addRow(new Object[]{
+                        pro_actu.getCodigo_producto(),
+                        pro_actu.getNombre(),
+                        pro_actu.getPrecio(),
+                        pro_actu.getDescripcion(),
+                        producto.getCantidad(),
+                        pro_actu.getMarca()
+                });
+            }
+            //TODO mostrar los productos de la bodega en la JTable1
+            jTable2.setModel(modelo);
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     public static javax.swing.JLabel name_inventarista_txt;
     // End of variables declaration//GEN-END:variables
 }

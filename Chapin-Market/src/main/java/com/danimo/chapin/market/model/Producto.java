@@ -5,18 +5,29 @@ public class Producto {
     private String nombre;
     private double precio;
     private String descripcion;
+    private String marca;
 
-    public Producto(int codigo_producto, String nombre, double precio , String descripcion) {
+    public Producto(int codigo_producto, String nombre, double precio, String descripcion, String marca) {
         this.codigo_producto = codigo_producto;
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
+        this.marca = marca;
     }
 
-    public Producto(String nombre, double precio , String descripcion) {
+    public Producto(String nombre, double precio, String descripcion, String marca) {
         this.nombre = nombre;
         this.precio = precio;
         this.descripcion = descripcion;
+        this.marca = marca;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
     }
 
     public String getDescripcion() {
