@@ -139,16 +139,16 @@ public class Login extends javax.swing.JInternalFrame {
                         name_txt_bodega.setText(emp.getNombre()+" "+ emp.getApellido());
                     }else if(emp.getRol_id().equals(Rol.INVENTARISTA)) {
                         Main.MainP.removeAll();
-                        CajeroView cajero_view = new CajeroView(emp.getId());
-                        Main.MainP.add(cajero_view);
-                        cajero_view.show();
-                        name_vendedor_txt.setText(emp.getNombre() + " " + emp.getApellido());
-                    } else if ( emp.getRol_id().equals(Rol.CAJERO)) {
-                        Main.MainP.removeAll();
                         InventaristaView cajero_view = new InventaristaView(emp.getId());
                         Main.MainP.add(cajero_view);
                         cajero_view.show();
                         name_inventarista_txt.setText(emp.getNombre() + " " + emp.getApellido());
+                    } else if ( emp.getRol_id().equals(Rol.CAJERO)) {
+                        Main.MainP.removeAll();
+                        CajeroView cajero_view = new CajeroView(emp.getId());
+                        Main.MainP.add(cajero_view);
+                        cajero_view.show();
+                        name_vendedor_txt.setText(emp.getNombre() + " " + emp.getApellido());
                     }
                 }
             }

@@ -186,6 +186,7 @@ public class BodegaView extends javax.swing.JInternalFrame {
             }
             //TODO mostrar los productos de la bodega en la JTable1
             jTable1.setModel(modelo);
+            jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
 
 

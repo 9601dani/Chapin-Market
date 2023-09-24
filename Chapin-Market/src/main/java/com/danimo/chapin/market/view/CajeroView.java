@@ -33,8 +33,12 @@ public class CajeroView extends javax.swing.JInternalFrame {
 
         label1 = new javax.swing.JLabel();
         name_vendedor_txt = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -47,7 +51,30 @@ public class CajeroView extends javax.swing.JInternalFrame {
         name_vendedor_txt.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         getContentPane().add(name_vendedor_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, 340, 30));
 
-        jMenu1.setText("File");
+        jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel1.setText("Productos en estanteria:");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, -1, -1));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 1420, 510));
+
+        jMenu1.setText("Ingreso");
+
+        jMenuItem2.setText("Ingresar Venta");
+        jMenu1.add(jMenuItem2);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Cerrar");
@@ -83,12 +110,19 @@ public class CajeroView extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    public void mostrarProductoEstanteriaSucursal(){
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel label1;
     public static javax.swing.JLabel name_vendedor_txt;
     // End of variables declaration//GEN-END:variables

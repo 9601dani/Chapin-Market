@@ -4,16 +4,13 @@ public class Estanteria {
     private int sucursal;
     private int producto;
     private int cantidad;
+    private int no_pasillo;
 
-    public Estanteria(int sucursal, int producto, int cantidad) {
+    public Estanteria(int sucursal, int producto, int cantidad, int no_pasillo) {
         this.sucursal = sucursal;
         this.producto = producto;
         this.cantidad = cantidad;
-    }
-
-    public Estanteria(int sucursal, int producto) {
-        this.sucursal = sucursal;
-        this.producto = producto;
+        this.no_pasillo = no_pasillo;
     }
 
     public int getSucursal() {
@@ -38,5 +35,13 @@ public class Estanteria {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public int getNo_pasillo() {
+        return no_pasillo;
+    }
+
+    public void setNo_pasillo(int no_pasillo) {
+        this.no_pasillo = no_pasillo;
     }
 }

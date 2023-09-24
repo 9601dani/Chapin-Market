@@ -14,6 +14,8 @@ import com.danimo.chapin.market.model.Producto;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 
@@ -56,6 +58,7 @@ public class InventaristaView extends javax.swing.JInternalFrame {
         jTable2 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -70,7 +73,7 @@ public class InventaristaView extends javax.swing.JInternalFrame {
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel2.setText("Producto en Estanteria:");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 100, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 100, -1, -1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -83,9 +86,10 @@ public class InventaristaView extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setEnabled(false);
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 730, 440));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 860, 450));
 
         jLabel3.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel3.setText("Productos en bodega");
@@ -102,11 +106,16 @@ public class InventaristaView extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable2.setEnabled(false);
         jScrollPane2.setViewportView(jTable2);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 160, 760, 440));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 160, 890, 440));
 
-        jMenu1.setText("File");
+        jMenu1.setText("Ingreso");
+
+        jMenuItem2.setText("Ingreso a Estanteria");
+        jMenu1.add(jMenuItem2);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Cerrar");
@@ -167,7 +176,24 @@ public class InventaristaView extends javax.swing.JInternalFrame {
                 });
             }
             //TODO mostrar los productos de la bodega en la JTable1
+            this.jTable1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if ( e.getClickCount()==2){
+                        int row = jTable1.rowAtPoint(e.getPoint());
+                        int col = jTable1.columnAtPoint(e.getPoint());
+                        if (row >= 0 && col >= 0) {
+                            JOptionPane.showMessageDialog(null, "Se ha seleccionado el producto: "+ jTable1.getValueAt(row,0));
+                            cambiarAEstanteria(Integer.parseInt(jTable1.getValueAt(row,0).toString()));
+                        }
+                    }
+                }
+            });
+
+            jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
             jTable1.setModel(modelo);
+
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al mostrar los productos de la bodega");
             e.printStackTrace();
@@ -187,6 +213,7 @@ public class InventaristaView extends javax.swing.JInternalFrame {
             modelo.addColumn("Descripcion");
             modelo.addColumn("Cantidad");
             modelo.addColumn("Marca");
+            modelo.addColumn("No Pasillo");
             for (Estanteria producto: productos_estanteria) {
                 Producto pro_actu= productoDao.obtenerPorId(producto.getProducto());
                 modelo.addRow(new Object[]{
@@ -195,7 +222,8 @@ public class InventaristaView extends javax.swing.JInternalFrame {
                         pro_actu.getPrecio(),
                         pro_actu.getDescripcion(),
                         producto.getCantidad(),
-                        pro_actu.getMarca()
+                        pro_actu.getMarca(),
+                        producto.getNo_pasillo()
                 });
             }
             //TODO mostrar los productos de la bodega en la JTable1
@@ -206,6 +234,44 @@ public class InventaristaView extends javax.swing.JInternalFrame {
             e.printStackTrace();
         }
     }
+
+    public void cambiarAEstanteria(int id_producto){
+        Bodega producto_bodega= new BodegaDaoImpl().obtenerProducto(getIdSucursal(new EmpleadoDaoImpl().obtenerPorId(this.id_empleado).getSucursal_id()),id_producto);
+        if (producto_bodega != null){
+            //TODO Pedir al usuario mediante un JOPTIONPANE la cantidad que se va a pasar a estanteria
+            int cantidad= Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad que se va a pasar a estanteria"));
+            if(producto_bodega.getCantidad()<cantidad){
+                JOptionPane.showMessageDialog(null, "No existen suficientes unidades");
+            }else{
+                //TODO verificar que existan suficientes unidades en bodega para pasar a estanteria
+                //TODO verificar que exista el producto en estanteria
+                Estanteria producto_estanteria= new EstanteriaDaoImpl().obtenerProducto(getIdSucursal(new EmpleadoDaoImpl().obtenerPorId(this.id_empleado).getSucursal_id()),id_producto);
+                if (producto_estanteria != null){
+                    //TODO si existe el producto en estanteria se actualizara la cantidad
+                    producto_estanteria.setCantidad(producto_estanteria.getCantidad()+cantidad);
+                    producto_bodega.setCantidad(producto_bodega.getCantidad()-cantidad);
+                    new EstanteriaDaoImpl().actualizar(producto_estanteria);
+                    new BodegaDaoImpl().actualizar(producto_bodega);
+                    JOptionPane.showMessageDialog(null, "Se ha actualizado la cantidad del producto en estanteria");
+                    this.mostrarProductosBodegaSucursal();
+                    this.mostrarProductosEstanteriaSucursal();
+                }else{
+                    //TODO si no existe el producto en estanteria se creara un nuevo registro
+                    //TODO solicito el numero de pasillo donde se esta registrando el producto
+                    int no_pasillo= Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de pasillo donde se va a registrar el producto"));
+                    new EstanteriaDaoImpl().insertar(new Estanteria(getIdSucursal(new EmpleadoDaoImpl().obtenerPorId(this.id_empleado).getSucursal_id()),id_producto,cantidad, no_pasillo ));
+                    producto_bodega.setCantidad(producto_bodega.getCantidad()-cantidad);
+                    new BodegaDaoImpl().actualizar(producto_bodega);
+                    JOptionPane.showMessageDialog(null, "Se ha creado un nuevo registro en estanteria");
+                    this.mostrarProductosBodegaSucursal();
+                    this.mostrarProductosEstanteriaSucursal();
+                }
+            }
+
+        }else{
+            JOptionPane.showMessageDialog(null,"No existe el producto en bodega");
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -214,6 +280,7 @@ public class InventaristaView extends javax.swing.JInternalFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;

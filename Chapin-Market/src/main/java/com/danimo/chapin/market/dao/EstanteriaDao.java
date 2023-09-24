@@ -9,5 +9,7 @@ import java.util.ArrayList;
 public interface EstanteriaDao extends CRUD<Estanteria> {
     ArrayList<Estanteria> obtenerProductosEstanterias(int sucursal);
     Producto obtenerProductoAdmin(String name_producto);
+    Estanteria obtenerProducto(int sucursal, int producto);
+
 
 }

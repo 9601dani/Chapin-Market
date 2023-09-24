@@ -21,7 +21,8 @@ public class EstanteriaDaoImpl implements EstanteriaDao {
                 Estanteria estanteria = new Estanteria(
                         resultadoConsulta.getInt("sucursal"),
                         resultadoConsulta.getInt("producto"),
-                        resultadoConsulta.getInt("cantidad")
+                        resultadoConsulta.getInt("cantidad"),
+                        resultadoConsulta.getInt("no_pasillo")
                 );
                 estanterias.add(estanteria);
             }
@@ -36,21 +37,66 @@ public class EstanteriaDaoImpl implements EstanteriaDao {
 
     @Override
     public Estanteria obtenerPorId(int id) {
+        String consulta = "SELECT * FROM rycp.estanteria where sucursal=" + id;
+        try{
+            PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
+            ResultSet resultadoConsulta = statement.executeQuery();
+            if (resultadoConsulta.next()) {
+                Estanteria estanteria = new Estanteria(
+                        resultadoConsulta.getInt("sucursal"),
+                        resultadoConsulta.getInt("producto"),
+                        resultadoConsulta.getInt("cantidad"),
+                        resultadoConsulta.getInt("no_pasillo")
+                );
+                return estanteria;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     public void insertar(Estanteria estanteria) {
+        String consulta = "INSERT INTO rycp.estanteria (sucursal, producto, cantidad, no_pasillo) VALUES (?,?,?,?)";
+        try{
+            PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
+            statement.setInt(1, estanteria.getSucursal());
+            statement.setInt(2, estanteria.getProducto());
+            statement.setInt(3, estanteria.getCantidad());
+            statement.setInt(4, estanteria.getNo_pasillo());
+            statement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void actualizar(Estanteria estanteria) {
+        String consulta = "UPDATE rycp.estanteria SET cantidad=? WHERE sucursal=? and producto=?";
+        try{
+            PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
+            statement.setInt(1, estanteria.getCantidad());
+            statement.setInt(2, estanteria.getSucursal());
+            statement.setInt(3, estanteria.getProducto());
+            statement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void eliminar(int id) {
+        String consulta = "DELETE FROM rycp.estanteria WHERE sucursal=? and producto=?";
+        try{
+            PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -65,7 +111,8 @@ public class EstanteriaDaoImpl implements EstanteriaDao {
                 Estanteria estanteria = new Estanteria(
                         resultadoConsulta.getInt("sucursal"),
                         resultadoConsulta.getInt("producto"),
-                        resultadoConsulta.getInt("cantidad")
+                        resultadoConsulta.getInt("cantidad"),
+                        resultadoConsulta.getInt("no_pasillo")
                 );
                 estanterias.add(estanteria);
             }
@@ -91,6 +138,28 @@ public class EstanteriaDaoImpl implements EstanteriaDao {
                         resultadoConsulta.getString("marca")
                 );
                 return producto;
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Estanteria obtenerProducto(int sucursal, int producto) {
+        String consulta = "SELECT * FROM rycp.estanteria where sucursal=" + sucursal + " and producto=" + producto;
+        try{
+            PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
+            ResultSet resultadoConsulta = statement.executeQuery();
+            if (resultadoConsulta.next()) {
+                Estanteria estanteria = new Estanteria(
+                        resultadoConsulta.getInt("sucursal"),
+                        resultadoConsulta.getInt("producto"),
+                        resultadoConsulta.getInt("cantidad"),
+                        resultadoConsulta.getInt("no_pasillo")
+                );
+                return estanteria;
             }
 
         }catch (Exception e){

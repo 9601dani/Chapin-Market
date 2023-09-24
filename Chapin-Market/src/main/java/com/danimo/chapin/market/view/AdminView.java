@@ -72,6 +72,7 @@ public class AdminView extends javax.swing.JInternalFrame {
             }
         }
         this.jTable1.setModel(modelo);
+        jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
     }
 
@@ -98,6 +99,7 @@ public class AdminView extends javax.swing.JInternalFrame {
             }
         }
         this.jTable2.setModel(modelo);
+        jTable2.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
 
     }
@@ -165,7 +167,7 @@ public class AdminView extends javax.swing.JInternalFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(243, 99, 220, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 90, 220, 40));
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -194,7 +196,7 @@ public class AdminView extends javax.swing.JInternalFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 610, -1, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 610, 230, 40));
 
         jMenu1.setText("Registro");
 
