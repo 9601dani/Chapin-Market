@@ -4,7 +4,18 @@
  */
 package com.danimo.chapin.market.view;
 
+import com.danimo.chapin.market.daoImpl.EmpleadoDaoImpl;
+import com.danimo.chapin.market.daoImpl.EstanteriaDaoImpl;
+import com.danimo.chapin.market.daoImpl.ProductoDaoImpl;
+import com.danimo.chapin.market.model.Empleado;
+import com.danimo.chapin.market.model.Estanteria;
+import com.danimo.chapin.market.model.Producto;
+
+import javax.swing.table.DefaultTableModel;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
+
+import static com.danimo.chapin.market.enums.Sucursal.getIdSucursal;
 
 /**
  *
@@ -20,6 +31,8 @@ public class CajeroView extends javax.swing.JInternalFrame {
         this.setMaximum(true);
         this.setResizable(true);
         this.id_empleado= id;
+        mostrarProductoEstanteriaSucursal();
+
     }
 
     /**
@@ -66,6 +79,7 @@ public class CajeroView extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setEnabled(false);
         jScrollPane1.setViewportView(jTable1);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, 1420, 510));
@@ -73,6 +87,11 @@ public class CajeroView extends javax.swing.JInternalFrame {
         jMenu1.setText("Ingreso");
 
         jMenuItem2.setText("Ingresar Venta");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         jMenuBar1.add(jMenu1);
@@ -110,7 +129,49 @@ public class CajeroView extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO aqui enviare a la ventana de venta:
+        VentaView ventaView = null;
+        try {
+            ventaView = new VentaView(this.id_empleado);
+            ventaView.setVisible(true);
+            Main.MainP.add(ventaView);
+            Main.MainP.moveToFront(ventaView);
+
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     public void mostrarProductoEstanteriaSucursal(){
+        // TODO mostrar los productos en la estanteria de la sucursal del cajero
+        try{
+            ArrayList<Estanteria> productos_estanteria = new EstanteriaDaoImpl().obtenerProductosEstanterias(getIdSucursal(new EmpleadoDaoImpl().obtenerPorId(this.id_empleado).getSucursal_id()));
+            ProductoDaoImpl productoDao = new ProductoDaoImpl();
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("Codigo");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Precio");
+            modelo.addColumn("Descripcion");
+            modelo.addColumn("Marca");
+            modelo.addColumn("Cantidad");
+            modelo.addColumn("No Pasillo");
+            for(Estanteria producto: productos_estanteria){
+                Producto pro_actu = productoDao.obtenerPorId(producto.getProducto());
+                modelo.addRow(new Object[]{
+                   pro_actu.getCodigo_producto(),
+                   pro_actu.getNombre(),
+                   pro_actu.getPrecio(),
+                   pro_actu.getDescripcion(),
+                   pro_actu.getMarca(),
+                   producto.getCantidad(),
+                   producto.getNo_pasillo()
+                });
+            }
+            this.jTable1.setModel(modelo);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         
     }
 

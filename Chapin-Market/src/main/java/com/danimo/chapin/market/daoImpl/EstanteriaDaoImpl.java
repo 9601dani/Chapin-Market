@@ -167,4 +167,35 @@ public class EstanteriaDaoImpl implements EstanteriaDao {
         }
         return null;
     }
+
+    @Override
+    public ArrayList<String> obtenerProductosSugeridos(int sucursal, String produc) {
+        String consulta = "SELECT * FROM rycp.estanteria where sucursal=" + sucursal;
+        try{
+            PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
+            ResultSet resultadoConsulta = statement.executeQuery();
+            ArrayList<Integer> productos = new ArrayList<>();
+            while (resultadoConsulta.next()){
+                int producto = resultadoConsulta.getInt("producto");
+                productos.add(producto);
+            }
+            //TODO aqui obtendre los nombres de los productos dado mi array "productos" tiene el codigo de los productos
+            ArrayList<String> nombres = new ArrayList<>();
+            for(int producto: productos){
+                String consulta2 = "SELECT nombre FROM rycp.producto where nombre LIKE ? ";
+                PreparedStatement statement2 = Conexion.obtenerConexion().prepareStatement(consulta2);
+                statement2.setString(1, "%" + produc + "%");
+                ResultSet resultadoConsulta2 = statement2.executeQuery();
+                if (resultadoConsulta2.next()) {
+                    String nombre = resultadoConsulta2.getString("nombre");
+                    nombres.add(nombre);
+                }
+            }
+            return nombres;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -10,6 +10,7 @@ public interface EstanteriaDao extends CRUD<Estanteria> {
     ArrayList<Estanteria> obtenerProductosEstanterias(int sucursal);
     Producto obtenerProductoAdmin(String name_producto);
     Estanteria obtenerProducto(int sucursal, int producto);
+    ArrayList<String> obtenerProductosSugeridos(int sucursal,String produc);
 
 
 }

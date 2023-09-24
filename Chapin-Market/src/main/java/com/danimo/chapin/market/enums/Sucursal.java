@@ -30,6 +30,19 @@ public enum Sucursal {
                 return 0;
         }
     }
+    
+    public static String getStringSucursal(Sucursal sucursal){
+        switch (sucursal){
+            case CENTRAL:
+                return "CENTRAL";
+            case NORTE:
+                return "NORTE";
+            case SUR:
+                return "SUR";
+            default:
+                return "ERROR";
+        }
+    }
 
 }
 

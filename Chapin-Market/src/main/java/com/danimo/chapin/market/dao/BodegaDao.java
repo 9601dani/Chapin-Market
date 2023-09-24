@@ -12,4 +12,5 @@ public interface BodegaDao extends CRUD<Bodega>{
 
     ArrayList<Bodega> obtenerProductosSucursal(int sucursal);
 
+
 }

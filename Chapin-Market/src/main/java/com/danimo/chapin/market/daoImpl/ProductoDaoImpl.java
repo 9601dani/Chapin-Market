@@ -113,4 +113,26 @@ public class ProductoDaoImpl implements ProductoDao {
         }
         return null;
     }
+
+    @Override
+    public Producto obtenerPorNombre(String nombre) {
+        String consulta = "SELECT * FROM rycp.producto where nombre='" + nombre + "'";
+        try{
+            PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
+            ResultSet resultadoConsulta = statement.executeQuery();
+            if (resultadoConsulta.next()) {
+                Producto producto = new Producto(
+                        resultadoConsulta.getInt("codigo_producto"),
+                        resultadoConsulta.getString("nombre"),
+                        resultadoConsulta.getDouble("precio"),
+                        resultadoConsulta.getString("descripcion"),
+                        resultadoConsulta.getString("marca")
+                );
+                return producto;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
