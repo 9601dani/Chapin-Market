@@ -6,6 +6,7 @@ import com.danimo.chapin.market.model.DetalleVenta;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class DetalleVentaDaoImpl implements DetalleVentaDao {
@@ -37,6 +38,17 @@ public class DetalleVentaDaoImpl implements DetalleVentaDao {
 
     @Override
     public void insertar(DetalleVenta detalleVenta) {
+        String consulta = "INSERT INTO rycp.detalleventa (codigo_venta, producto, cantidad) VALUES(?,?,?)";
+        System.out.println("Insertando detalle venta  "+detalleVenta.getCodigo_venta());
+        try{
+            PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
+            statement.setInt(1, detalleVenta.getCodigo_venta());
+            statement.setInt(2, detalleVenta.getCodigo_producto());
+            statement.setInt(3, detalleVenta.getCantidad_producto());
+            statement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

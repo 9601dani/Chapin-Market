@@ -97,28 +97,34 @@ public class IngresarABodegaView extends javax.swing.JInternalFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO vere si existe el producto en bodega de sucursal para actualizarlo, y si no hago un nuevo registro en mi entidad bodega:
         String name_product = jComboBox1.getSelectedItem().toString();
-        int cantidad = Integer.parseInt(jTextField1.getText());
-        //consulto mi empleado, para saber en que sucursal estoy
-        Empleado empleado = new EmpleadoDaoImpl().obtenerPorId(this.id_empleado);
-        BodegaDaoImpl bodegaDaoImpl = new BodegaDaoImpl();
-        Producto producto = new BodegaDaoImpl().obtenerProductoAdmin(name_product);
-        Bodega producto_in_bodega= bodegaDaoImpl.obtenerProducto( getIdSucursal(empleado.getSucursal_id()),producto.getCodigo_producto());
-        System.out.println("id_sucursal: "+getIdSucursal(empleado.getSucursal_id())+" name_product: "+name_product);
-        System.out.println("producto_in_bodega: "+producto_in_bodega);
-        if (producto_in_bodega != null){
-            //actualizo la cantidad
-            producto_in_bodega.setCantidad(producto_in_bodega.getCantidad()+cantidad);
-            bodegaDaoImpl.actualizar(producto_in_bodega);
-            JOptionPane.showMessageDialog(null,"Se actualizo la cantidad del producto en bodega");
+        int cantidad=0;
+        cantidad = Integer.parseInt(jTextField1.getText());
+        if(cantidad <= 0){
+            JOptionPane.showMessageDialog(null,"La cantidad debe ser mayor a 0, campo vacio");
         }else{
-            //creo un nuevo registro, y primero voy a buscar el producto en la bd
-            System.out.println("entre aqui en el else");
-            System.out.println("producto "+ producto);
-            Bodega bodega = new Bodega(getIdSucursal(empleado.getSucursal_id()),producto.getCodigo_producto(),cantidad);
-            bodegaDaoImpl.insertar(bodega);
-            JOptionPane.showMessageDialog(null,"Se agrego el producto a bodega");
+
+            //consulto mi empleado, para saber en que sucursal estoy
+            Empleado empleado = new EmpleadoDaoImpl().obtenerPorId(this.id_empleado);
+            BodegaDaoImpl bodegaDaoImpl = new BodegaDaoImpl();
+            Producto producto = new BodegaDaoImpl().obtenerProductoAdmin(name_product);
+            Bodega producto_in_bodega= bodegaDaoImpl.obtenerProducto( getIdSucursal(empleado.getSucursal_id()),producto.getCodigo_producto());
+            System.out.println("id_sucursal: "+getIdSucursal(empleado.getSucursal_id())+" name_product: "+name_product);
+            System.out.println("producto_in_bodega: "+producto_in_bodega);
+            if (producto_in_bodega != null){
+                //actualizo la cantidad
+                producto_in_bodega.setCantidad(producto_in_bodega.getCantidad()+cantidad);
+                bodegaDaoImpl.actualizar(producto_in_bodega);
+                JOptionPane.showMessageDialog(null,"Se actualizo la cantidad del producto en bodega");
+            }else{
+                //creo un nuevo registro, y primero voy a buscar el producto en la bd
+                System.out.println("entre aqui en el else");
+                System.out.println("producto "+ producto);
+                Bodega bodega = new Bodega(getIdSucursal(empleado.getSucursal_id()),producto.getCodigo_producto(),cantidad);
+                bodegaDaoImpl.insertar(bodega);
+                JOptionPane.showMessageDialog(null,"Se agrego el producto a bodega");
+            }
+            this.jTextField1.setText("");
         }
-        this.jTextField1.setText("");
 
 
         

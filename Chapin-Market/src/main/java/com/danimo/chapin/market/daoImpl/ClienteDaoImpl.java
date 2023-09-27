@@ -90,12 +90,12 @@ public class ClienteDaoImpl implements ClienteDao {
     }
 
     @Override
-    public void actualizarPuntos(int nit, int puntos) {
+    public void actualizarPuntos(String nit, int puntos) {
         String consulta = "UPDATE rycc.cliente SET no_puntos=? WHERE nit_cliente=?";
         try{
             PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
             statement.setInt(1, puntos);
-            statement.setInt(2, nit);
+            statement.setString(2, nit);
             statement.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();

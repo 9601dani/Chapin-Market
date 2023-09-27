@@ -5,19 +5,21 @@
 package com.danimo.chapin.market.view;
 
 import com.danimo.chapin.market.daoImpl.*;
-import com.danimo.chapin.market.model.Cliente;
-import com.danimo.chapin.market.model.Empleado;
-import com.danimo.chapin.market.model.Estanteria;
-import com.danimo.chapin.market.model.Producto;
+import com.danimo.chapin.market.enums.CategoriaTarjeta;
+import com.danimo.chapin.market.model.*;
 
 import java.beans.PropertyVetoException;
 
-import java.awt.Color;
+import java.sql.SQLOutput;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.sql.Date;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+import static com.danimo.chapin.market.enums.CategoriaTarjeta.datoCategoriaTarjeta;
 import static com.danimo.chapin.market.enums.Sucursal.*;
 
 /**
@@ -31,6 +33,7 @@ public class VentaView extends javax.swing.JInternalFrame {
 
     private static JPopupMenu sugerencias_popup;
     private double total_venta = 0;
+    private VentaManejador venta_manejador;
     /**
      * Creates new form VentaView
      */
@@ -45,6 +48,7 @@ public class VentaView extends javax.swing.JInternalFrame {
         txt_cantidad.setModel(new SpinnerNumberModel(0,0, Integer.MAX_VALUE,1));
         this.setearModeloTabla();
         this.llenarComboBoxProductos();
+        this.venta_manejador = new VentaManejador();
     }
 
     /**
@@ -272,10 +276,28 @@ public class VentaView extends javax.swing.JInternalFrame {
         double precio_unitario = Double.parseDouble(jTextField3.getText());
         Producto producto = new ProductoDaoImpl().obtenerPorNombre(nombre_producto);
         if (producto != null){
+            if(cantidad==0){
+                JOptionPane.showMessageDialog(null, "Debe ingresar una cantidad mayor a 0");
+                return;
+            }
             total_venta=total_venta+(double) (cantidad*precio_unitario);
             txt_total.setText(Double.toString(total_venta));
             // TODO si existe el producto lo agrego a la lista
             productos.add(producto);
+
+            //TODO: verifico si el producto ya esta en la lista, para hacer el update
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                int codigo_producto = (int) jTable1.getValueAt(i, 0);
+                if(codigo_producto==producto.getCodigo_producto()){
+                    int cantidad_actual = (int) jTable1.getValueAt(i, 2);
+                    jTable1.setValueAt(cantidad_actual+cantidad, i, 2);
+                    //TODO: limpio los campos
+                    jComboBox1.setSelectedIndex(0);
+                    jTextField3.setText("");
+                    txt_cantidad.setValue(0);
+                    return;
+                }
+            }
             // TODO agrego el producto a la tabla
             DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
             Object[] fila = new Object[4];
@@ -330,6 +352,9 @@ public class VentaView extends javax.swing.JInternalFrame {
         if (producto != null){
             // TODO si existe el producto lo agrego a la lista
             jTextField3.setText(Double.toString(producto.getPrecio()));
+            //TODO: aqui seteo que el maximo numero del spinner sea la cantidad de productos en estanteria, obteniendo el producto de la estanteria
+            Estanteria estanteria = new EstanteriaDaoImpl().obtenerProducto(getIdSucursal(empleado_general.getSucursal_id()), producto.getCodigo_producto());
+            txt_cantidad.setModel(new SpinnerNumberModel(0,0, estanteria.getCantidad(),1));
         }else{
             // TODO si no existe el producto lo agrego a la lista
             JOptionPane.showMessageDialog(null, "No existe el producto");
@@ -341,12 +366,81 @@ public class VentaView extends javax.swing.JInternalFrame {
     private void button_pagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_pagoActionPerformed
         // TODO aqui procedere al pago de la venta, y actualizare los puntos del cliente
         // TODO: tengo que verificar que el campo del nit no este vacio
+        String nit = (jTextField1.getText());
+        Double total = Double.parseDouble(txt_total.getText());
         if (jTextField1.getText().isEmpty()){
             JOptionPane.showMessageDialog(null, "Debe ingresar el nit del cliente");
         }else{
-            //TODO: si el nit no esta vacio, procedo a guardar la venta en la bd
-            //TODO: abstraigo toda la lista de productos a un arraylist
-            ArrayList<Producto> productos = new ArrayList<>();
+            int puntos_a_utilizar=0;
+            if(nit.equals("CF") || Integer.parseInt(txt_puntos.getText()) ==0){
+                JOptionPane.showMessageDialog(null,"El cliente no tiene puntos disponibles");
+            }else {
+                puntos_a_utilizar= Integer.parseInt(JOptionPane.showInputDialog("Ingrese puntos a utilizar"));
+            }
+            int puntos_cliente = Integer.parseInt(txt_puntos.getText());
+            if(this.venta_manejador.verificarPuntos(puntos_cliente, puntos_a_utilizar)){
+                //TODO: abstraigo toda la lista de productos a un arraylist
+                ArrayList<Producto> productos = new ArrayList<>();
+                //lista para guardar la cantidad a vender de cada producto
+                ArrayList<Integer> cantidades = new ArrayList<>();
+                for (int i = 0; i < jTable1.getRowCount(); i++) {
+                    int codigo_producto = (int) jTable1.getValueAt(i, 0);
+                    Producto producto = new ProductoDaoImpl().obtenerPorId(codigo_producto);
+                    productos.add(producto);
+                    int cantidad = (int) jTable1.getValueAt(i, 2);
+                    cantidades.add(cantidad);
+                }
+                //TODO: obtenemos el total
+                double total_venta = Double.parseDouble(txt_total.getText()) - puntos_a_utilizar;
+                if(nit.equals("CF")){
+                    new VentaDaoImpl().insertar(new Venta(LocalDate.now() , Double.parseDouble(txt_total.getText()), puntos_a_utilizar, total_venta, nit, this.empleado_general.getId()));
+                    Venta venta = new VentaDaoImpl().obtenerUltimaVenta();
+                    System.out.println(venta.toString());
+                    //TODO: Guardare los productos vendidos y actualizare la cantidad en estanteria
+
+                    for (int i = 0; i < productos.size(); i++) {
+                        Producto producto = productos.get(i);
+                        int cantidad = cantidades.get(i);
+                        new DetalleVentaDaoImpl().insertar(new DetalleVenta(venta.getCodigo_venta(), producto.getCodigo_producto(), cantidad));
+                        new EstanteriaDaoImpl().actualizarCantidad(getIdSucursal(this.empleado_general.getSucursal_id()), producto.getCodigo_producto(), cantidad);
+                    }
+                    JOptionPane.showMessageDialog(null, "Venta realizada con exito");
+                    this.dispose();
+                }else {
+                    Tarjeta tarjeta = new TarjetaDaoImpl().obtenerPorCliente(nit);
+                    if (tarjeta == null) {
+                        //TODO: registro nueva tarjeta
+                        new TarjetaDaoImpl().insertar(new Tarjeta(nit, CategoriaTarjeta.COMUN, Double.parseDouble(txt_total.getText())));
+                        JOptionPane.showMessageDialog(null, "Se ha registrado una nueva tarjeta al cliente con nit: "+nit);
+                    }else{
+                        double nuevo_tt= tarjeta.getTotal_gastado()+total_venta;
+                        new TarjetaDaoImpl().actualizar(new Tarjeta(tarjeta.getNit_cliente(), tarjeta.getCodigo_categoria(), nuevo_tt));
+                    }
+                    //TODO: guardo la venta en la bd
+                    new VentaDaoImpl().insertar(new Venta(LocalDate.now() , Double.parseDouble(txt_total.getText()), puntos_a_utilizar, total_venta, nit, this.empleado_general.getId()));
+                    new ClienteDaoImpl().actualizarPuntos(nit, puntos_cliente - puntos_a_utilizar);
+                    //TODO: le sumo los puntos al cliente
+                    new ClienteDaoImpl().actualizarPuntos(nit, puntos_cliente + (int) (total_venta*(datoCategoriaTarjeta(new TarjetaDaoImpl().obtenerPorCliente(nit).getCodigo_categoria()))));
+                    //TODO: verifico si ya tiene una tarjeta asociada
+                    //TODO: obtendre la ultima venta
+                    Venta venta = new VentaDaoImpl().obtenerUltimaVenta();
+                    System.out.println(venta.toString());
+                    //TODO: Guardare los productos vendidos y actualizare la cantidad en estanteria
+
+                    for (int i = 0; i < productos.size(); i++) {
+                        Producto producto = productos.get(i);
+                        int cantidad = cantidades.get(i);
+                        new DetalleVentaDaoImpl().insertar(new DetalleVenta(venta.getCodigo_venta(), producto.getCodigo_producto(), cantidad));
+                        new EstanteriaDaoImpl().actualizarCantidad(getIdSucursal(this.empleado_general.getSucursal_id()), producto.getCodigo_producto(), cantidad);
+                    }
+                    //TODO: obtengo el cliente para ver sus puntos
+                    //TODO: sumo los puntos del cliente
+                    new ClienteDaoImpl().actualizarPuntos(nit, puntos_cliente + (int) (total_venta* (datoCategoriaTarjeta(new TarjetaDaoImpl().obtenerPorCliente(nit).getCodigo_categoria()))));
+                    JOptionPane.showMessageDialog(null, "Venta realizada con exito");
+                    this.dispose();
+                }
+            }
+
 
 
         }
@@ -362,6 +456,7 @@ public class VentaView extends javax.swing.JInternalFrame {
         }
         jComboBox1.setModel(modelo);
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscar_cliente;

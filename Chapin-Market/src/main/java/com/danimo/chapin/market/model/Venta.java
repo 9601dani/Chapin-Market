@@ -1,17 +1,18 @@
 package com.danimo.chapin.market.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Date;
 
 public class Venta {
     private int codigo_venta;
-    private Date fecha;
+    private LocalDate fecha;
     private double subtotal;
     private double descuento;
     private double total;
     private String nit_cliente;
     private int codigo_empleado;
 
-    public Venta(int codigo_venta, Date fecha, double subtotal, double descuento, double total, String nit_cliente, int codigo_empleado) {
+    public Venta(int codigo_venta, LocalDate fecha, double subtotal, double descuento, double total, String nit_cliente, int codigo_empleado) {
         this.codigo_venta = codigo_venta;
         this.fecha = fecha;
         this.subtotal = subtotal;
@@ -21,7 +22,7 @@ public class Venta {
         this.codigo_empleado = codigo_empleado;
     }
 
-    public Venta(Date fecha, double subtotal, double descuento, double total, String nit_cliente, int codigo_empleado) {
+    public Venta(LocalDate fecha, double subtotal, double descuento, double total, String nit_cliente, int codigo_empleado) {
         this.fecha = fecha;
         this.subtotal = subtotal;
         this.descuento = descuento;
@@ -38,11 +39,11 @@ public class Venta {
         this.codigo_venta = codigo_venta;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
@@ -84,5 +85,18 @@ public class Venta {
 
     public void setCodigo_empleado(int codigo_empleado) {
         this.codigo_empleado = codigo_empleado;
+    }
+
+    @Override
+    public String toString() {
+        return "Venta{" +
+                "codigo_venta=" + codigo_venta +
+                ", fecha=" + fecha +
+                ", subtotal=" + subtotal +
+                ", descuento=" + descuento +
+                ", total=" + total +
+                ", nit_cliente='" + nit_cliente + '\'' +
+                ", codigo_empleado=" + codigo_empleado +
+                '}';
     }
 }

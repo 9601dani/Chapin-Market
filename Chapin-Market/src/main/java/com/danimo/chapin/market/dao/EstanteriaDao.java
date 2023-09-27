@@ -11,6 +11,7 @@ public interface EstanteriaDao extends CRUD<Estanteria> {
     Producto obtenerProductoAdmin(String name_producto);
     Estanteria obtenerProducto(int sucursal, int producto);
     ArrayList<String> obtenerProductosSugeridos(int sucursal,String produc);
+    void actualizarCantidad(int sucursal, int producto, int cantidad);
 
 
 }

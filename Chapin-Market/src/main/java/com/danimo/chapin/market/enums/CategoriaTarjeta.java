@@ -21,7 +21,7 @@ public enum CategoriaTarjeta {
         }
     }
 
-    public static int getIdCategoriaTarjeta(CategoriaTarjeta categoriaTarjeta){
+    public static int getIdCategoriaTarjetaInt(CategoriaTarjeta categoriaTarjeta){
         switch (categoriaTarjeta){
             case COMUN:
                 return 1;
@@ -49,5 +49,19 @@ public enum CategoriaTarjeta {
             default:
                 return null;
         }
+    }
+
+    public static double datoCategoriaTarjeta(CategoriaTarjeta categoriaTarjeta){
+        System.out.println("Categoria tarjeta: "+categoriaTarjeta);
+        if (categoriaTarjeta == CategoriaTarjeta.COMUN){
+            return 0.025;
+        }else if (categoriaTarjeta == CategoriaTarjeta.ORO){
+            return 0.05;
+        }else if (categoriaTarjeta == CategoriaTarjeta.PLATINO){
+            return 0.10;
+        }else if (categoriaTarjeta == CategoriaTarjeta.DIAMANTE){
+            return 0.15;
+        }
+        return 0.0;
     }
 }

@@ -198,4 +198,23 @@ public class EstanteriaDaoImpl implements EstanteriaDao {
         }
         return null;
     }
+
+    @Override
+    public void actualizarCantidad(int sucursal, int producto, int cantidad) {
+        String consulta = "UPDATE rycp.estanteria SET cantidad=? WHERE sucursal=? and producto=?";
+        try{
+            Estanteria estan= this.obtenerProducto(sucursal, producto);
+            estan.getCantidad();
+            int total= estan.getCantidad() - cantidad;
+            PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
+            statement.setInt(1, total);
+            statement.setInt(2, sucursal);
+            statement.setInt(3, producto);
+            statement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
 }

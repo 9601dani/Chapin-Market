@@ -13,6 +13,12 @@ public class DetalleVenta {
         this.cantidad_producto = cantidad_producto;
     }
 
+    public DetalleVenta(int codigo_venta, int codigo_producto, int cantidad_producto) {
+        this.codigo_venta = codigo_venta;
+        this.codigo_producto = codigo_producto;
+        this.cantidad_producto = cantidad_producto;
+    }
+
     public int getCodigo_detalle_venta() {
         return codigo_detalle_venta;
     }
