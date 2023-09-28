@@ -46,8 +46,9 @@ public class Login extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         username_txt = new javax.swing.JTextField();
-        password_txt = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        password_txt = new javax.swing.JPasswordField();
+        jRadioButton1 = new javax.swing.JRadioButton();
 
         setResizable(true);
         setTitle("LOGIN");
@@ -70,9 +71,6 @@ public class Login extends javax.swing.JInternalFrame {
         username_txt.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jPanel2.add(username_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 270, 255, -1));
 
-        password_txt.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jPanel2.add(password_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 340, 255, -1));
-
         jButton1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jButton1.setText("Iniciar Sesion");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -80,19 +78,28 @@ public class Login extends javax.swing.JInternalFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 420, -1, -1));
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 480, 160, 50));
+        jPanel2.add(password_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 340, 250, 30));
+
+        jRadioButton1.setText("Ver Contraseña");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 420, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1418, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE))
         );
 
         pack();
@@ -160,6 +167,15 @@ public class Login extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        // TODO: para ver la contraseña o no:
+        if(jRadioButton1.isSelected()){
+            password_txt.setEchoChar((char)0);
+        }else{
+            password_txt.setEchoChar('*');
+        }
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -167,7 +183,8 @@ public class Login extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField password_txt;
+    private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JPasswordField password_txt;
     private javax.swing.JTextField username_txt;
     // End of variables declaration//GEN-END:variables
 }

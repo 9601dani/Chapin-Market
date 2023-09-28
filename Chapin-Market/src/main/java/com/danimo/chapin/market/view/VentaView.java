@@ -6,6 +6,7 @@ package com.danimo.chapin.market.view;
 
 import com.danimo.chapin.market.daoImpl.*;
 import com.danimo.chapin.market.enums.CategoriaTarjeta;
+import com.danimo.chapin.market.handlers.MLogin;
 import com.danimo.chapin.market.model.*;
 
 import java.beans.PropertyVetoException;
@@ -20,6 +21,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import static com.danimo.chapin.market.enums.CategoriaTarjeta.datoCategoriaTarjeta;
+import static com.danimo.chapin.market.enums.CategoriaTarjeta.getNombreCategoriaTarjeta;
 import static com.danimo.chapin.market.enums.Sucursal.*;
 
 /**
@@ -86,6 +88,9 @@ public class VentaView extends javax.swing.JInternalFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txt_puntos = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        categoria_txt = new javax.swing.JTextField();
+        button_update_cliente = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         button_pago = new javax.swing.JButton();
 
@@ -217,14 +222,32 @@ public class VentaView extends javax.swing.JInternalFrame {
         jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel9.setText("Puntos");
-        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
+        jLabel9.setText("Categoria Tarjeta");
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
 
         txt_puntos.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         txt_puntos.setEnabled(false);
         jPanel3.add(txt_puntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, 230, 30));
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 440, 520, 280));
+        jLabel11.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel11.setText("Puntos");
+        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
+
+        categoria_txt.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        categoria_txt.setEnabled(false);
+        jPanel3.add(categoria_txt, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 280, 250, 30));
+
+        button_update_cliente.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        button_update_cliente.setText("Modificar Cliente");
+        button_update_cliente.setEnabled(false);
+        button_update_cliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_update_clienteActionPerformed(evt);
+            }
+        });
+        jPanel3.add(button_update_cliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 360, 210, 40));
+
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 440, 520, 430));
 
         jLabel7.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabel7.setText("Datos Cliente");
@@ -325,9 +348,17 @@ public class VentaView extends javax.swing.JInternalFrame {
         // TODO buscar al cliente por su nit
         Cliente cliente = new ClienteDaoImpl().obtenerPorNit(nit);
         if (cliente != null){
+            //TODO: aqui habilito el boton de modificar cliente
+            button_update_cliente.setEnabled(true);
             // TODO si existe lo muestro en los campos de texto
             jTextField2.setText(cliente.getNombre());
             txt_puntos.setText(Integer.toString(cliente.getNo_puntos()));
+            Tarjeta tarjeta = new TarjetaDaoImpl().obtenerPorCliente(nit);
+            if(tarjeta!=null) {
+                categoria_txt.setText(getNombreCategoriaTarjeta(tarjeta.getCodigo_categoria()));
+            }else{
+                categoria_txt.setText("No tiene tarjeta");
+            }
         }else{
             // TODO si no existe muestro un formulario para ingresar sus datos a la bd
             try{
@@ -378,6 +409,18 @@ public class VentaView extends javax.swing.JInternalFrame {
                 puntos_a_utilizar= Integer.parseInt(JOptionPane.showInputDialog("Ingrese puntos a utilizar"));
             }
             int puntos_cliente = Integer.parseInt(txt_puntos.getText());
+
+            if(puntos_a_utilizar >0){
+                //TODO: actualizo los puntos del cliente
+                if(puntos_a_utilizar > puntos_cliente){
+                    JOptionPane.showMessageDialog(null, "El cliente no tiene suficientes puntos");
+                    return;
+                }else{
+                    System.out.println();
+                    puntos_cliente = puntos_cliente - puntos_a_utilizar;
+                    new ClienteDaoImpl().actualizarPuntos(nit, puntos_cliente);
+                }
+            }
             if(this.venta_manejador.verificarPuntos(puntos_cliente, puntos_a_utilizar)){
                 //TODO: abstraigo toda la lista de productos a un arraylist
                 ArrayList<Producto> productos = new ArrayList<>();
@@ -418,9 +461,11 @@ public class VentaView extends javax.swing.JInternalFrame {
                     }
                     //TODO: guardo la venta en la bd
                     new VentaDaoImpl().insertar(new Venta(LocalDate.now() , Double.parseDouble(txt_total.getText()), puntos_a_utilizar, total_venta, nit, this.empleado_general.getId()));
-                    new ClienteDaoImpl().actualizarPuntos(nit, puntos_cliente - puntos_a_utilizar);
                     //TODO: le sumo los puntos al cliente
-                    new ClienteDaoImpl().actualizarPuntos(nit, puntos_cliente + (int) (total_venta*(datoCategoriaTarjeta(new TarjetaDaoImpl().obtenerPorCliente(nit).getCodigo_categoria()))));
+                    if (total_venta >= 200){
+                        int dato = (int) (total_venta/200);
+                        new ClienteDaoImpl().actualizarPuntos(nit, puntos_cliente + (dato * datoCategoriaTarjeta(new TarjetaDaoImpl().obtenerPorCliente(nit).getCodigo_categoria())));
+                    }
                     //TODO: verifico si ya tiene una tarjeta asociada
                     //TODO: obtendre la ultima venta
                     Venta venta = new VentaDaoImpl().obtenerUltimaVenta();
@@ -435,7 +480,6 @@ public class VentaView extends javax.swing.JInternalFrame {
                     }
                     //TODO: obtengo el cliente para ver sus puntos
                     //TODO: sumo los puntos del cliente
-                    new ClienteDaoImpl().actualizarPuntos(nit, puntos_cliente + (int) (total_venta* (datoCategoriaTarjeta(new TarjetaDaoImpl().obtenerPorCliente(nit).getCodigo_categoria()))));
                     JOptionPane.showMessageDialog(null, "Venta realizada con exito");
                     this.dispose();
                 }
@@ -445,6 +489,42 @@ public class VentaView extends javax.swing.JInternalFrame {
 
         }
     }//GEN-LAST:event_button_pagoActionPerformed
+
+    private void button_update_clienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_update_clienteActionPerformed
+        // TODO add your handling code here:
+        String nit = (jTextField1.getText());
+        Cliente cliente = new ClienteDaoImpl().obtenerPorNit(nit);
+        if (cliente != null){
+
+            //TODO: tiene que ingresar usuario y contraseña del admin
+            String usuario = JOptionPane.showInputDialog("Ingrese usuario de un administrador");
+            String password = JOptionPane.showInputDialog("Ingrese contraseña del usuario");
+            //TODO: verifico que el usuario y contraseña sean de un admin A LA BD
+            MLogin mLogin = new MLogin();
+            try {
+                int cliente1 = mLogin.validarUsuario(usuario, password);
+                if(cliente1 == -1){
+                    JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
+                    return;
+                }else{
+                    //TODO: llamo al formulario para actualizar los datos del cliente
+                    try{
+                        UpdateClienteView updateClienteView = new UpdateClienteView(cliente);
+                        updateClienteView.setVisible(true);
+                        Main.MainP.add(updateClienteView);
+                        updateClienteView.moveToFront();
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+        }
+        
+    }//GEN-LAST:event_button_update_clienteActionPerformed
 
 
     private void llenarComboBoxProductos(){
@@ -462,10 +542,13 @@ public class VentaView extends javax.swing.JInternalFrame {
     private javax.swing.JButton buscar_cliente;
     private javax.swing.JButton button_agregar_lista;
     private javax.swing.JButton button_pago;
+    private javax.swing.JButton button_update_cliente;
+    private javax.swing.JTextField categoria_txt;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

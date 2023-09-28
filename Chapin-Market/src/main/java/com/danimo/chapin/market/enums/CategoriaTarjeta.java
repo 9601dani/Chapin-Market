@@ -51,17 +51,17 @@ public enum CategoriaTarjeta {
         }
     }
 
-    public static double datoCategoriaTarjeta(CategoriaTarjeta categoriaTarjeta){
+    public static int datoCategoriaTarjeta(CategoriaTarjeta categoriaTarjeta){
         System.out.println("Categoria tarjeta: "+categoriaTarjeta);
         if (categoriaTarjeta == CategoriaTarjeta.COMUN){
-            return 0.025;
+            return 5;
         }else if (categoriaTarjeta == CategoriaTarjeta.ORO){
-            return 0.05;
+            return 10;
         }else if (categoriaTarjeta == CategoriaTarjeta.PLATINO){
-            return 0.10;
+            return 20;
         }else if (categoriaTarjeta == CategoriaTarjeta.DIAMANTE){
-            return 0.15;
+            return 30;
         }
-        return 0.0;
+        return 0;
     }
 }
