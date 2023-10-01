@@ -6,6 +6,7 @@ package com.danimo.chapin.market.view;
 
 import com.danimo.chapin.market.daoImpl.*;
 import com.danimo.chapin.market.enums.CategoriaTarjeta;
+import com.danimo.chapin.market.enums.Rol;
 import com.danimo.chapin.market.handlers.MLogin;
 import com.danimo.chapin.market.model.*;
 
@@ -22,6 +23,8 @@ import javax.swing.table.DefaultTableModel;
 
 import static com.danimo.chapin.market.enums.CategoriaTarjeta.datoCategoriaTarjeta;
 import static com.danimo.chapin.market.enums.CategoriaTarjeta.getNombreCategoriaTarjeta;
+import static com.danimo.chapin.market.enums.Rol.getIdRol;
+import static com.danimo.chapin.market.enums.Rol.getRol;
 import static com.danimo.chapin.market.enums.Sucursal.*;
 
 /**
@@ -507,6 +510,11 @@ public class VentaView extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
                     return;
                 }else{
+                    //TODO: si es admin, procedo a actualizar los datos del cliente
+                    if(getIdRol(new EmpleadoDaoImpl().obtenerPorId(cliente1).getRol_id())!=(4)){
+                        JOptionPane.showMessageDialog(null, "El usuario ingresado no es un administrador");
+                        return;
+                    }
                     //TODO: llamo al formulario para actualizar los datos del cliente
                     try{
                         UpdateClienteView updateClienteView = new UpdateClienteView(cliente);

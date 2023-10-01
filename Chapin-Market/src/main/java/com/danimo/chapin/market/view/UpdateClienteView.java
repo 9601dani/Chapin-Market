@@ -54,6 +54,7 @@ public class UpdateClienteView extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         button_actualizar = new javax.swing.JButton();
 
+        setClosable(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N

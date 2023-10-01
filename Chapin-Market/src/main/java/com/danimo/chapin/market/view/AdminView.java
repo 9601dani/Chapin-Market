@@ -128,7 +128,11 @@ public class AdminView extends javax.swing.JInternalFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
 
@@ -220,8 +224,45 @@ public class AdminView extends javax.swing.JInternalFrame {
 
         jMenu2.setText("Reportes");
 
+        jMenuItem5.setText("Historial Descuentos");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
         jMenuItem2.setText("Reporte top 10 Ventas");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem2);
+
+        jMenuItem6.setText("Ingresos Sucursales");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
+
+        jMenuItem7.setText("Articulos Mas Vendidos");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem7);
+
+        jMenuItem8.setText("Mejores Clientes");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem8);
 
         jMenuBar1.add(jMenu2);
 
@@ -303,6 +344,77 @@ public class AdminView extends javax.swing.JInternalFrame {
         JOptionPane.showMessageDialog(null, "Se actualizaron los productos");
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        try {
+            Reporte1 reporte1= new Reporte1();
+            Main.MainP.add(reporte1);
+            reporte1.show();
+            this.toBack();
+            reporte1.toFront();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al abrir el formulario de registro de empleados");
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+         try {
+            Reporte2 reporte2= new Reporte2();
+            Main.MainP.add(reporte2);
+            reporte2.show();
+            this.toBack();
+            reporte2.toFront();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al abrir el formulario de registro de empleados");
+            System.out.println(e);
+        }
+
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        try {
+            Reporte3 reporte3= new Reporte3();
+            Main.MainP.add(reporte3);
+            reporte3.show();
+            this.toBack();
+            reporte3.toFront();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al abrir el formulario de registro de empleados");
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        // TODO add your handling code here:
+        try {
+            Reporte4 reporte4= new Reporte4();
+            Main.MainP.add(reporte4);
+            reporte4.show();
+            this.toBack();
+            reporte4.toFront();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al abrir el formulario de registro de empleados");
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        // TODO add your handling code here:
+          try {
+            Reporte5 reporte5= new Reporte5();
+            Main.MainP.add(reporte5);
+            reporte5.show();
+            this.toBack();
+            reporte5.toFront();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al abrir el formulario de registro de empleados");
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -318,6 +430,10 @@ public class AdminView extends javax.swing.JInternalFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
