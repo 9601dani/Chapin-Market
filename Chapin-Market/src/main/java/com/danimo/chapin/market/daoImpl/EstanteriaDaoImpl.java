@@ -12,7 +12,8 @@ import java.util.ArrayList;
 public class EstanteriaDaoImpl implements EstanteriaDao {
     @Override
     public ArrayList<Estanteria> obtenerTodos() {
-        String consulta = "SELECT * FROM rycp.estanteria;";
+        //TODO: obtener todos los productos de la estanteria ordenador por el codigo de producto
+        String consulta = "SELECT * FROM rycp.estanteria ORDER BY producto";
         try{
             PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);
             ResultSet resultadoConsulta = statement.executeQuery();

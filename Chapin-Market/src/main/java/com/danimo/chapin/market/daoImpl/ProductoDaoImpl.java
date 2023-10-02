@@ -38,6 +38,7 @@ public class ProductoDaoImpl implements ProductoDao {
 
     @Override
     public Producto obtenerPorId(int id) {
+        //TODO: obtener producto por id ordenados por el codigo de producto
         String consulta = "SELECT * FROM rycp.producto where codigo_producto=" + id;
         try{
             PreparedStatement statement = Conexion.obtenerConexion().prepareStatement(consulta);

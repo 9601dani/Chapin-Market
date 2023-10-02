@@ -44,4 +44,14 @@ public class Cliente {
     public void setNo_puntos(int no_puntos) {
         this.no_puntos = no_puntos;
     }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "nit='" + nit + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", no_puntos=" + no_puntos +
+                '}';
+    }
 }

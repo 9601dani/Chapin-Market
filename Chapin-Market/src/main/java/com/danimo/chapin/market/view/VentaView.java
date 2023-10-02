@@ -350,6 +350,7 @@ public class VentaView extends javax.swing.JInternalFrame {
         String nit = (jTextField1.getText());
         // TODO buscar al cliente por su nit
         Cliente cliente = new ClienteDaoImpl().obtenerPorNit(nit);
+        System.out.println(cliente);
         if (cliente != null){
             //TODO: aqui habilito el boton de modificar cliente
             button_update_cliente.setEnabled(true);
