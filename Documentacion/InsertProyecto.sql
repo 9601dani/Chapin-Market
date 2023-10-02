@@ -14,10 +14,10 @@ INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_
 INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('Daniel', 'Xicará', 'dani96', 'dani123', 2, 1, 1);
 INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('Luis', 'García', 'luis96', 'luis123', 0, 1, 2);
 INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('Juan', 'Pérez', 'juan96', 'juan123', 0, 1, 3);
-INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('Carlos', 'García', 'carlos96', 'carlos123', 0, 2, 1);
+INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('Carlos', 'García', 'carlos96', 'carlos123', 3, 2, 1);
 INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('Pedro', 'Pérez', 'pedro96', 'pedro123', 0, 2, 2);
 INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('Mario', 'García', 'mario96', 'mario123', 0, 2, 3);
-INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('José', 'Pérez', 'jose96', 'jose123', 0, 3, 1);
+INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('José', 'Pérez', 'jose96', 'jose123', 6, 3, 1);
 INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('Jorge', 'García', 'jorge96', 'jorge123', 0, 3, 2);
 INSERT INTO ryce.empleado(nombre, apellido, username, password, no_caja, codigo_sucursal, codigo_rol) VALUES ('Javier', 'Pérez', 'javier96', 'javier123', 0, 3, 3);
 
@@ -673,3 +673,87 @@ INSERT INTO rycp.estanteria(sucursal, producto, cantidad, no_pasillo) VALUES (3,
 INSERT INTO rycp.estanteria(sucursal, producto, cantidad, no_pasillo) VALUES (3, 73, 100,12);
 INSERT INTO rycp.estanteria(sucursal, producto, cantidad, no_pasillo) VALUES (3, 74, 100,12);
 INSERT INTO rycp.estanteria(sucursal, producto, cantidad, no_pasillo) VALUES (3, 75, 100,12);
+
+/*--------------------------HARE 5 VENTAS EN CADA SUCURSAL 1-------------------------------------------*/
+INSERT INTO rycp.venta VALUES (1,'2023-01-09', 1053.00, 23, 1030.00, '1667958k',2);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (1,1, 25, 100);
+INSERT INTO rycp.detalleventa VALUES (2,1, 35, 70);
+
+INSERT INTO rycp.venta VALUES (2,'2023-02-21', 1766.1, 0.00, 1766.1, '18207170',2);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (3,2, 20, 150);
+INSERT INTO rycp.detalleventa VALUES (4,2, 30, 50);
+INSERT INTO rycp.detalleventa VALUES (5,2, 40, 33);
+INSERT INTO rycp.detalleventa VALUES (6,2, 50, 25);
+
+INSERT INTO rycp.venta VALUES (3,'2023-03-01', 1461.1, 1, 1460.1, '18207171',2);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (8,3, 20, 150);
+INSERT INTO rycp.detalleventa VALUES (9,3, 30, 50);
+INSERT INTO rycp.detalleventa VALUES (10,3, 40, 33);
+
+INSERT INTO rycp.venta VALUES (4,'2023-08-25', 1058.5, 8, 1050.5, '18207172',2);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (11,4, 20, 150);
+INSERT INTO rycp.detalleventa VALUES (12,4, 30, 50);
+
+INSERT INTO rycp.venta VALUES (5,'2023-08-25', 448.5, 8, 1040.5, '18207173',2);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (13, 5, 20, 150);
+
+/*--------------------------HARE 5 VENTAS EN CADA SUCURSAL 2-------------------------------------------*/
+INSERT INTO rycp.venta VALUES (6,'2023-09-25', 448.5, 8, 1040.5, '18207174',5);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (14, 6, 20, 150);
+
+INSERT INTO rycp.venta VALUES (7,'2023-08-25', 1058.5, 8, 1050.5, '18207170',5);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (16, 7, 20, 150);
+INSERT INTO rycp.detalleventa VALUES (15, 7, 30, 50);
+
+INSERT INTO rycp.venta VALUES (8,'2023-09-26', 1461.1, 1, 1460.1, '1667958k',5);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (17, 8, 20, 150);
+INSERT INTO rycp.detalleventa VALUES (18, 8, 30, 50);
+INSERT INTO rycp.detalleventa VALUES (19, 8, 40, 33);
+
+INSERT INTO rycp.venta VALUES (9,'2023-09-26', 1766.1, 0.00, 1766.1, '18207179',5);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (20, 9, 20, 150);
+INSERT INTO rycp.detalleventa VALUES (21, 9, 30, 50);
+INSERT INTO rycp.detalleventa VALUES (22, 9, 40, 33);
+INSERT INTO rycp.detalleventa VALUES (23, 9, 50, 25);
+
+INSERT INTO rycp.venta VALUES (10,'2023-09-27', 1053.00, 0.00, 1053.00, '1667958k',5);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (24,10, 25, 100);
+INSERT INTO rycp.detalleventa VALUES (25,10, 35, 70);
+
+/*--------------------------HARE 5 VENTAS EN CADA SUCURSAL 3-------------------------------------------*/
+INSERT INTO rycp.venta VALUES (11,'2023-09-25', 448.5, 8, 1040.5, '18207174',8);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (26, 11, 20, 150);
+
+INSERT INTO rycp.venta VALUES (12,'2023-08-25', 1058.5, 8, 1050.5, '18207170',8);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (27, 12, 20, 150);
+INSERT INTO rycp.detalleventa VALUES (28, 12, 30, 50);
+
+INSERT INTO rycp.venta VALUES (13,'2023-09-26', 1461.1, 1, 1460.1, '1667958k',8);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (29, 13, 20, 150);
+INSERT INTO rycp.detalleventa VALUES (30, 13, 30, 50);
+INSERT INTO rycp.detalleventa VALUES (31, 13, 40, 33);
+
+INSERT INTO rycp.venta VALUES (14,'2023-09-26', 1766.1, 0.00, 1766.1, '18207179',8);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (32, 14, 20, 150);
+INSERT INTO rycp.detalleventa VALUES (33, 14, 30, 50);
+INSERT INTO rycp.detalleventa VALUES (34, 14, 40, 33);
+INSERT INTO rycp.detalleventa VALUES (35, 14, 50, 25);
+
+INSERT INTO rycp.venta VALUES (15,'2023-09-27', 1053.00, 0.00, 1053.00, 'CF',8);
+/*Detalle Venta*/
+INSERT INTO rycp.detalleventa VALUES (36, 15, 25, 100);
+INSERT INTO rycp.detalleventa VALUES (37, 15, 35, 70);
